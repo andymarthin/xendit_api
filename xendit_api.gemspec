@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency 'model_attribute', '~> 3.0.0'
-  spec.add_dependency 'faraday', '~> 0.11.0'
+  spec.add_dependency 'faraday', '~> 0.12.2'
   spec.add_dependency 'faraday_middleware', '~>  0.10.1'
 
   spec.add_development_dependency "bundler", "~> 1.13"
@@ -30,6 +30,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency 'capybara', '2.5.0'
   spec.add_development_dependency 'shoulda-context', '1.2.2'
-  spec.add_development_dependency 'shoulda-matchers', '3.1.1'  
+  spec.add_development_dependency 'shoulda-matchers', '3.1.1'
   spec.add_development_dependency 'webmock', '2.1.0'
 end

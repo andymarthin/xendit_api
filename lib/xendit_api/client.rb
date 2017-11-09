@@ -28,8 +28,8 @@ module XenditApi
       return nil if @api_key.empty?
 
       response = make_request(
-        'bank_account_data_requests', 
-        'post', 
+        'bank_account_data_requests',
+        'post',
         { bank_account_number: account_number, bank_code: bank_code }
       )
 
@@ -49,10 +49,10 @@ module XenditApi
     def create_invoice(external_id:, payer_email:, description:, amount:)
       return nil if @api_key.empty?
 
-      data = { 
-        external_id: external_id, 
-        payer_email: payer_email, 
-        description: description, 
+      data = {
+        external_id: external_id,
+        payer_email: payer_email,
+        description: description,
         amount: amount
       }
 
@@ -65,13 +65,13 @@ module XenditApi
     def create_fixed_virtual_account(external_id:, bank_code:, name:, virtual_account_number:)
       return nil if @api_key.empty?
 
-      data = { 
-        external_id: external_id, 
-        bank_code: bank_code, 
-        name: name, 
+      data = {
+        external_id: external_id,
+        bank_code: bank_code,
+        name: name,
         virtual_account_number: virtual_account_number
       }
-      
+
       response = make_request('callback_virtual_accounts', 'post', data)
 
       attrs = JSON.parse(response.body)
@@ -88,7 +88,7 @@ module XenditApi
       elements = JSON.parse(response.body)
       banks = []
 
-      elements.each do |element| 
+      elements.each do |element|
         banks << XenditApi::Entities::Bank.new(element)
       end
 
@@ -105,7 +105,7 @@ module XenditApi
       elements = JSON.parse(response.body)
       banks = []
 
-      elements.each do |element| 
+      elements.each do |element|
         banks << XenditApi::Entities::Bank.new(element)
       end
 
@@ -125,9 +125,9 @@ module XenditApi
     def create_disbursement(idempotency_key: nil, external_id:, bank_code:, account_holder_name:, account_number:, description:, amount:)
       return nil if @api_key.empty?
 
-      data = { 
-        external_id: external_id, 
-        bank_code: bank_code, 
+      data = {
+        external_id: external_id,
+        bank_code: bank_code,
         account_holder_name: account_holder_name,
         account_number: account_number,
         description: description,
@@ -137,7 +137,7 @@ module XenditApi
       if idempotency_key.nil?
         headers = {}
       else
-        headers = { 'X-IDEMPOTENCY-KEY' => idempotency_key } 
+        headers = { 'X-IDEMPOTENCY-KEY' => idempotency_key }
       end
 
       response = make_request('disbursements', 'post', data, headers)
@@ -149,12 +149,12 @@ module XenditApi
     def charge_credit_card(external_id:, token:, amount:)
       return nil if @api_key.empty?
 
-      data = { 
-        external_id: external_id, 
-        token: token, 
+      data = {
+        external_id: external_id,
+        token: token,
         amount: amount
       }
-      
+
       response = make_request('credit_card_charges', 'post', data)
 
       attrs = JSON.parse(response.body)
@@ -173,7 +173,7 @@ module XenditApi
       end
 
       @connection.authorization(:Basic, @token)
-      # finish setting up connection      
+      # finish setting up connection
     end
 
     def make_request(endpoint, method, payload = {}, headers = {})
