@@ -8,10 +8,10 @@ require 'support/fixture_support'
 WebMock.disable_net_connect!
 
 RSpec.configure do |config|
-	config.treat_symbols_as_metadata_keys_with_true_values = true 
+	config.treat_symbols_as_metadata_keys_with_true_values = true
 	config.run_all_when_everything_filtered = true
-	config.filter_run :focus 
-  config.order = 'random' 
+	config.filter_run :focus
+  config.order = 'random'
 
   config.include FixtureSupport
   # Stubs
@@ -29,5 +29,5 @@ RSpec.configure do |config|
   #       body: '{"status": 200, "success": true, "result": []}',
   #       headers: {}
   #      )
-  # end  
+  # end
 end

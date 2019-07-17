@@ -1,7 +1,9 @@
-require "base64"
-require "faraday"
-require "faraday_middleware"
-require "json"
+# frozen_string_literal: true
+
+require 'base64'
+require 'faraday'
+require 'faraday_middleware'
+require 'json'
 
 module XenditApi
   class Client
@@ -30,7 +32,7 @@ module XenditApi
       response = make_request(
         'bank_account_data_requests',
         'post',
-        { bank_account_number: account_number, bank_code: bank_code }
+        bank_account_number: account_number, bank_code: bank_code
       )
 
       JSON.parse(response.body)
@@ -134,11 +136,11 @@ module XenditApi
         amount: amount
       }
 
-      if idempotency_key.nil?
-        headers = {}
-      else
-        headers = { 'X-IDEMPOTENCY-KEY' => idempotency_key }
-      end
+      headers = if idempotency_key.nil?
+                  {}
+                else
+                  { 'X-IDEMPOTENCY-KEY' => idempotency_key }
+                end
 
       response = make_request('disbursements', 'post', data, headers)
 
@@ -161,15 +163,31 @@ module XenditApi
       XenditApi::Entities::CardCharge.new(attrs)
     end
 
+    def create_ewallet_payment(external_id:, phone:, amount:, ewallet_type:)
+      return nil if @api_key.empty?
+
+      payload = {
+        external_id: external_id,
+        phone: phone,
+        amount: amount,
+        ewallet_type: ewallet_type
+      }
+
+      response = make_request('ewallet-payment', 'post', payload)
+
+      attrs = JSON.parse(response.body)
+      XenditApi::Entities::Ewallet.new(attrs)
+    end
+
     private
 
     def setup_connection
-     # start setting up connections
+      # start setting up connections
       @connection = Faraday.new(url: XenditApi::BASE_URL) do |faraday|
         faraday.use FaradayMiddleware::RaiseHttpException
-        faraday.response :logger                  # log requests to STDOUT
+        faraday.response :logger # log requests to STDOUT
         faraday.request :url_encoded
-        faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
+        faraday.adapter Faraday.default_adapter # make requests with Net::HTTP
       end
 
       @connection.authorization(:Basic, @token)
