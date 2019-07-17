@@ -43,9 +43,9 @@ To retrieve an existing invoice
 Create invoice to accept bank transfers
 
     client.create_invoice(
-      external_id: 'demo_1475801962607', 
-      payer_email: 'sample_email@xendit.co', 
-      description: 'Trip to Bali', 
+      external_id: 'demo_1475801962607',
+      payer_email: 'sample_email@xendit.co',
+      description: 'Trip to Bali',
       amount: 230000
     )
 
@@ -58,9 +58,9 @@ Retrieves the current list of banks Xendit support for creating virtual account.
 Create a fixed virtual account to accept bank transfers, callback will be sent everytime this FVA is paid.
 
     client.create_fixed_virtual_account(
-      external_id: 'demo_virtual_account_1475459775872', 
-      bank_code: 'BCA', 
-      name: 'Rika Sutanto', 
+      external_id: 'demo_virtual_account_1475459775872',
+      bank_code: 'BCA',
+      name: 'Rika Sutanto',
       virtual_account_number: nil
     )
 * Note that the virtual_account_number argument is optional
@@ -79,12 +79,12 @@ Retrieves the current status of a disbursement. This is often used for checking 
 Create a disbursement order
 
     client.create_disbursement(
-      idempotency_key: nil, 
-      external_id: 'demo_1475459775872', 
-      bank_code: 'BCA', 
-      account_holder_name: 'Bob Jones', 
-      account_number: '1231241231', 
-      description: 'Reimbursement for shoes', 
+      idempotency_key: nil,
+      external_id: 'demo_1475459775872',
+      bank_code: 'BCA',
+      account_holder_name: 'Bob Jones',
+      account_number: '1231241231',
+      description: 'Reimbursement for shoes',
       amount: 100000
     )
 
@@ -94,9 +94,19 @@ Create a disbursement order
 Charge a cedit card using token returned by xendit.js
 
     client.charge_credit_card(
-      external_id: 'Xendit', 
-      token: '586f0ba2ab70de5d2b409e0d', 
+      external_id: 'Xendit',
+      token: '586f0ba2ab70de5d2b409e0d',
       amount: 100000
+    )
+
+### Create Ewallet Payment
+Create a payment with Ewallet
+
+    client.create_ewallet_payment(
+      external_id: 'demo_hello_world',
+      amount: 77777,
+      phone: '123456789',
+      ewallet_type: 'OVO'
     )
 
 ## Development
