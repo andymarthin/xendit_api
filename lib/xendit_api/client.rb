@@ -172,8 +172,10 @@ module XenditApi
         amount: amount,
         ewallet_type: ewallet_type
       }
-
-      response = make_request('ewallets', 'post', payload)
+      headers = {
+        content_type: 'application/json'
+      }
+      response = make_request('ewallets', 'post', payload.to_json, headers)
 
       attrs = JSON.parse(response.body)
       XenditApi::Entities::Ewallet.new(attrs)
