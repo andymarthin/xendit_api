@@ -9,7 +9,7 @@ module XenditApi
       attribute :amount,            :integer
       attribute :ewallet_type,      :string
       attribute :business_id,       :string
-      attribute :transaction_date,  :time
+      attribute :transaction_date,  :string
 
       def initialize(attributes = {})
         set_attributes(attributes)
