@@ -176,11 +176,7 @@ module XenditApi
         content_type: 'application/json'
       }
 
-      request = {
-        timeout: 90,
-        open_timeout: 5
-      }
-      response = make_request('ewallets', 'post', payload.to_json, headers, request)
+      response = make_request('ewallets', 'post', payload.to_json, headers)
 
       attrs = JSON.parse(response.body)
       XenditApi::Entities::Ewallet.new(attrs)
@@ -201,9 +197,9 @@ module XenditApi
       # finish setting up connection
     end
 
-    def make_request(endpoint, method, payload = {}, headers = {}, requests = {})
+    def make_request(endpoint, method, payload = {}, headers = {})
       # make the request for the transaction
-      return @connection.post(endpoint, payload, headers, requests) if method == 'post'
+      return @connection.post(endpoint, payload, headers) if method == 'post'
 
       @connection.get endpoint
     end

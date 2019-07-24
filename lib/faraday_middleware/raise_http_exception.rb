@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'faraday'
 
 module FaradayMiddleware
@@ -10,15 +12,15 @@ module FaradayMiddleware
         when 401
           raise XenditApi::Unauthorized, error_message_400(response)
         when 403
-          raise XenditApi::Forbidden, error_message_400(response)          
+          raise XenditApi::Forbidden, error_message_400(response)
         when 404
           raise XenditApi::NotFound, error_message_400(response)
         when 500
-          raise XenditApi::InternalServerError, error_message_500(response, "Something is technically wrong.")
+          raise XenditApi::InternalServerError, error_message_500(response, 'Something is technically wrong.')
         when 502
-          raise XenditApi::BadGateway, error_message_500(response, "The server returned an invalid or incomplete response.")
+          raise XenditApi::BadGateway, error_message_500(response, 'The server returned an invalid or incomplete response.')
         when 504
-          raise XenditApi::GatewayTimeout, error_message_500(response, "504 Gateway Time-out")
+          raise XenditApi::GatewayTimeout, error_message_500(response, '504 Gateway Time-out')
         end
       end
     end
@@ -31,27 +33,29 @@ module FaradayMiddleware
     private
 
     def error_message_400(response)
-      "#{response[:method].to_s.upcase} #{response[:url].to_s}: #{response[:status]}#{error_body(response[:body])}"
+      "#{response[:method].to_s.upcase} #{response[:url]}: #{response[:status]}#{error_body(response[:body])}"
     end
 
     def error_body(body)
       # body gets passed as a string, not sure if it is passed as something else from other spots?
-      if not body.nil? and not body.empty? and body.kind_of?(String)
+      if !body.nil? && !body.empty? && body.is_a?(String)
         # removed multi_json thanks to wesnolte's commit
         body = ::JSON.parse(body)
       end
 
       if body.nil?
         nil
-      elsif body['meta'] and body['meta']['error_message'] and not body['meta']['error_message'].empty?
+      elsif body['meta'] && body['meta']['error_message'] && !body['meta']['error_message'].empty?
         ": #{body['meta']['error_message']}"
-      elsif body['error_message'] and not body['error_message'].empty?
+      elsif body['error_message'] && !body['error_message'].empty?
         ": #{body['error_type']}: #{body['error_message']}"
+      elsif body['error_code'] && !body['error_code'].empty?
+        ": #{body['error_code']}: #{body['message']}"
       end
     end
 
-    def error_message_500(response, body=nil)
-      "#{response[:method].to_s.upcase} #{response[:url].to_s}: #{[response[:status].to_s + ':', body].compact.join(' ')}"
+    def error_message_500(response, body = nil)
+      "#{response[:method].to_s.upcase} #{response[:url]}: #{[response[:status].to_s + ':', body].compact.join(' ')}"
     end
   end
 end
