@@ -1,6 +1,12 @@
 module XenditApi
   # Custom error class for rescuing from all Xendit API errors
-  class Error < StandardError; end
+  class Error < StandardError
+    attr_reader :raw
+    def initialize(msg, raw = nil)
+      @raw = raw
+      super(msg)
+    end
+  end
 
   # Raised when Xendit API returns the HTTP status code 400
   class BadRequest < Error; end

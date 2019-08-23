@@ -8,7 +8,7 @@ module FaradayMiddleware
       @app.call(env).on_complete do |response|
         case response[:status].to_i
         when 400
-          raise XenditApi::BadRequest, error_message_400(response)
+          raise XenditApi::BadRequest.new error_message_400(response), raw_body(response)
         when 401
           raise XenditApi::Unauthorized, error_message_400(response)
         when 403
@@ -56,6 +56,10 @@ module FaradayMiddleware
 
     def error_message_500(response, body = nil)
       "#{response[:method].to_s.upcase} #{response[:url]}: #{[response[:status].to_s + ':', body].compact.join(' ')}"
+    end
+
+    def raw_body(response)
+      ::JSON.parse(response.body)
     end
   end
 end
