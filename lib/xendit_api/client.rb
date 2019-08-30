@@ -157,6 +157,7 @@ module XenditApi
         amount: amount
       }
 
+      @connection.options.timeout = 180
       response = make_request('credit_card_charges', 'post', data)
 
       attrs = JSON.parse(response.body)

@@ -10,17 +10,17 @@ module FaradayMiddleware
         when 400
           raise XenditApi::BadRequest.new error_message_400(response), raw_body(response)
         when 401
-          raise XenditApi::Unauthorized, error_message_400(response)
+          raise XenditApi::Unauthorized, error_message_400(response), raw_body(response)
         when 403
-          raise XenditApi::Forbidden, error_message_400(response)
+          raise XenditApi::Forbidden, error_message_400(response), raw_body(response)
         when 404
-          raise XenditApi::NotFound, error_message_400(response)
+          raise XenditApi::NotFound, error_message_400(response), raw_body(response)
         when 500
-          raise XenditApi::InternalServerError, error_message_500(response, 'Something is technically wrong.')
+          raise XenditApi::InternalServerError, error_message_500(response, 'Something is technically wrong.'), raw_body(response)
         when 502
-          raise XenditApi::BadGateway, error_message_500(response, 'The server returned an invalid or incomplete response.')
+          raise XenditApi::BadGateway, error_message_500(response, 'The server returned an invalid or incomplete response.'), raw_body(response)
         when 504
-          raise XenditApi::GatewayTimeout, error_message_500(response, '504 Gateway Time-out')
+          raise XenditApi::GatewayTimeout, error_message_500(response, '504 Gateway Time-out'), raw_body(response)
         end
       end
     end
